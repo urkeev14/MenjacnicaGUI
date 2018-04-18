@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Toolkit;
@@ -21,9 +22,13 @@ import javax.swing.JPopupMenu;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+
+import javax.sound.sampled.Port.Info;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -56,6 +61,7 @@ public class MenjacnicaGUI extends JFrame {
 	private JTextArea textAreaStatus;
 
 	private MenjacnicaGUI glavniProzor;
+	JOptionPane option;
 
 	/**
 	 * Launch the application.
@@ -77,10 +83,16 @@ public class MenjacnicaGUI extends JFrame {
 	 * Create the frame.
 	 */
 	public MenjacnicaGUI() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				zatvori();
+			}
+		});
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(MenjacnicaGUI.class.getResource("/icons/exchangeOffice.png")));
 		setTitle("Menjacnica");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 728, 397);
 		setJMenuBar(getMenuBar_1());
 		contentPane = new JPanel();
@@ -93,6 +105,8 @@ public class MenjacnicaGUI extends JFrame {
 
 		this.glavniProzor = this;
 	}
+	
+	
 
 	private JMenuBar getMenuBar_1() {
 		if (menuBar == null) {
@@ -184,6 +198,12 @@ public class MenjacnicaGUI extends JFrame {
 	private JMenuItem getMntmAbout() {
 		if (mntmAbout == null) {
 			mntmAbout = new JMenuItem("About");
+			mntmAbout.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					JOptionPane.showMessageDialog(null, "Author:\nUros Veljkovic, Student", "About", 1);
+					
+				}
+			});
 		}
 		return mntmAbout;
 	}
@@ -365,5 +385,14 @@ public class MenjacnicaGUI extends JFrame {
 
 	public void appendTextArea(String txt) {
 		textAreaStatus.append(txt);
+	}
+	
+	public void zatvori() {
+		int selected = JOptionPane.showConfirmDialog(null, "Da li zelite da izadjete iz programa?", "Izlazak",
+				JOptionPane.YES_NO_CANCEL_OPTION);
+
+		if (selected == JOptionPane.YES_OPTION) {
+			System.exit(0);
+		}
 	}
 }
